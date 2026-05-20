@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BusyPet — 브라우저에 사는 픽셀 친구들</title>
+<meta name="description" content="14종 픽셀 펫 캐릭터가 브라우저 페이지를 자유롭게 돌아다니는 Chrome 확장 프로그램. 무료 5종 + Pro 9종 ($2.99 평생).">
+<link rel="icon" href="icon.png" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+                 "Noto Sans CJK KR", sans-serif;
+    color: #1a1f2e;
+    background: linear-gradient(180deg, #f6f4ff 0%, #ffffff 60%);
+    line-height: 1.6;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  header {
+    padding: 24px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo-row { display: flex; align-items: center; gap: 12px; }
+  .logo-row img { width: 40px; height: 40px; border-radius: 10px; }
+  .logo-row .name { font-size: 22px; font-weight: 800; color: #2a1d6a; }
+  nav a {
+    color: #5a5f70; text-decoration: none; margin-left: 24px; font-size: 15px;
+  }
+  nav a:hover { color: #2a1d6a; }
+
+  .hero {
+    text-align: center;
+    padding: 80px 0 100px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.1;
+    color: #1a1145;
+    margin-bottom: 24px;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+  }
+  .hero .sub {
+    font-size: 22px;
+    color: #5a5f70;
+    margin-bottom: 16px;
+  }
+  .hero .sub-en { font-size: 18px; color: #8a8f9a; margin-bottom: 40px; }
+  .cta {
+    display: inline-block;
+    background: linear-gradient(135deg, #7a5ce6 0%, #5e3fcc 100%);
+    color: white;
+    padding: 18px 36px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 18px; font-weight: 700;
+    box-shadow: 0 8px 24px rgba(122, 92, 230, 0.35);
+    transition: transform 0.15s;
+  }
+  .cta:hover { transform: translateY(-2px); }
+  .price-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff7e3a, #ffd84a);
+    color: #1a1a1a;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 14px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  section { padding: 80px 0; }
+  section h2 {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: #1a1145;
+    font-weight: 800;
+  }
+  section .lede {
+    font-size: 18px;
+    color: #5a5f70;
+    margin-bottom: 48px;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .feature {
+    background: white;
+    border: 1px solid #ebeaf3;
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .feature .icon {
+    font-size: 36px; margin-bottom: 14px;
+  }
+  .feature h3 {
+    font-size: 18px; margin-bottom: 8px; color: #1a1145;
+  }
+  .feature p {
+    color: #6a6f80; font-size: 15px;
+  }
+
+  .pricing {
+    background: #f9f7ff;
+    text-align: center;
+  }
+  .price-card {
+    background: white;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    border-radius: 24px;
+    border: 2px solid #ffd084;
+    box-shadow: 0 20px 60px rgba(122, 92, 230, 0.12);
+  }
+  .price-card .price {
+    font-size: 72px;
+    font-weight: 900;
+    color: #1a1145;
+    letter-spacing: -2px;
+  }
+  .price-card .price small { font-size: 28px; color: #8a8f9a; }
+  .price-card .terms { color: #6a6f80; margin-bottom: 32px; }
+  .price-card ul {
+    list-style: none; text-align: left;
+    margin: 0 auto 32px;
+    max-width: 320px;
+  }
+  .price-card li {
+    padding: 10px 0;
+    color: #2a3040;
+    font-size: 16px;
+    border-bottom: 1px dashed #f0eaf8;
+  }
+  .price-card li:last-child { border: 0; }
+
+  footer {
+    padding: 40px 0;
+    border-top: 1px solid #ebeaf3;
+    color: #8a8f9a;
+    font-size: 14px;
+    text-align: center;
+  }
+  footer a { color: #5a5f70; margin: 0 8px; }
+  .lang { font-size: 14px; color: #8a8f9a; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <header class="container">
+    <div class="logo-row">
+      <img src="icon.png" alt="BusyPet" onerror="this.style.display='none'" />
+      <div class="name">BusyPet</div>
+    </div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="mailto:smlim0804@gmail.com">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>브라우저에 사는 픽셀 친구들 🐾</h1>
+      <p class="sub">14종 픽셀 펫이 페이지를 가로질러 따라다녀요</p>
+      <p class="sub-en">Pixel pets that follow you across browser tabs.<br>
+        ブラウザに住むピクセル友達がタブを越えて追従。</p>
+      <a class="cta" href="#pricing">Get BusyPet <span class="price-badge">$2.99</span></a>
+    </section>
+
+    <section id="features" class="container">
+      <h2>What's inside</h2>
+      <p class="lede">14 hand-crafted pixel characters · cross-tab follow · 5-minute Pro trial</p>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">🐾</div>
+          <h3>14 캐릭터 · 14 Characters</h3>
+          <p>UFO · 자동차 · 슬라임 · 혜성 · 별 등 무료 5종 + Pro 9종 (로켓·토성·보석·도넛·해골·안구·에너지볼·벌레·탱크)</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🌍</div>
+          <h3>탭 가로질러 따라옴</h3>
+          <p>활성 탭이 바뀌면 펫이 자동으로 그 탭으로 텔레포트. 여러 창에서도 한 마리만 따라다님.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🎮</div>
+          <h3>자유로운 행동 설정</h3>
+          <p>움직임 · 마우스 반응 · 속도 · 크기 · 활동 영역 (전체/상단/하단/직접 그리기)</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🔗</div>
+          <h3>바로가기 말풍선</h3>
+          <p>펫 클릭 → 자주 가는 사이트 바로가기. 무료 2개 / Pro 무제한.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">✨</div>
+          <h3>Pro 이펙트</h3>
+          <p>무지개 잔상, 탱크 레이저 빔, 캐릭터별 특수 효과.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🔒</div>
+          <h3>프라이버시 안전</h3>
+          <p>모든 설정 로컬 저장 · 페이지 내용 읽지 않음 · 트래커 없음.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <h2>Pro 평생 사용</h2>
+        <p class="lede">One-time payment, lifetime access · 단 한 번 결제로 평생</p>
+        <div class="price-card">
+          <div class="price">$2.99<small> USD</small></div>
+          <p class="terms">단 한 번 결제 · 평생 사용 · 모든 업데이트 포함</p>
+          <ul>
+            <li>✓ Pro 캐릭터 9종 잠금 해제</li>
+            <li>✓ 무지개 이펙트 + 특수효과</li>
+            <li>✓ 무제한 바로가기</li>
+            <li>✓ 5분 무료 체험 후 결제</li>
+            <li>✓ 모든 미래 업데이트 포함</li>
+          </ul>
+          <a class="cta" href="https://chromewebstore.google.com/" target="_blank" rel="noopener">
+            Chrome Web Store에서 받기
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div>
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="mailto:smlim0804@gmail.com">Contact</a> ·
+      <a href="https://chromewebstore.google.com/" target="_blank" rel="noopener">Chrome Web Store</a>
+    </div>
+    <div class="lang">한국어 / English / 日本語 supported</div>
+    <div style="margin-top: 16px;">© 2026 BusyPet. All rights reserved.</div>
+  </footer>
+</body>
+</html>
