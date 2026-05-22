@@ -32,6 +32,7 @@
     padding: 20px 24px; border-radius: 8px; margin-bottom: 32px;
   }
   .tldr strong { color: #2a1d6a; }
+  .lang-section { margin-top: 48px; padding-top: 32px; border-top: 2px solid #ebeaf3; }
 </style>
 </head>
 <body>
@@ -43,74 +44,227 @@
   </header>
 
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: 2026-05-20</p>
+  <p class="updated">Last updated: 2026-05-22 · Extension version 1.0.0</p>
 
   <div class="tldr">
-    <p><strong>TL;DR:</strong> We do not collect, transmit, or sell any
-    personal data. No analytics, no trackers, no ads. Everything BusyPet
-    stores stays on your local browser.</p>
+    <p><strong>TL;DR:</strong> BusyPet does not collect, transmit, or sell
+    any personal data. No analytics, no trackers, no advertising. The
+    extension never reads your page contents — it only renders a pet
+    overlay. All settings stay on your local browser (with optional Chrome
+    account sync for your Pro license key only).</p>
   </div>
 
   <h2>What we store locally</h2>
-  <p>BusyPet uses <code>chrome.storage.local</code> (a Chrome-provided
-  per-browser storage) to remember your preferences:</p>
+  <p>BusyPet uses <code>chrome.storage.local</code> (per-device) to
+  remember:</p>
   <ul>
-    <li>Selected pet characters per slot</li>
-    <li>Behavior settings (speed, size, area, mouse mode, effect mode, language)</li>
-    <li>Your custom shortcut bookmarks</li>
+    <li>Selected pet characters per slot (1–5)</li>
+    <li>Per-slot behavior settings (motion, mouse mode, speed, size,
+        effect mode, activity area)</li>
+    <li>Custom shortcut bookmarks (the URLs you choose to pin)</li>
     <li>Saved pet positions per tab</li>
-    <li>Pro license key (if you purchased Pro)</li>
-    <li>Pro trial expiration timestamp (if you started the 5-min trial)</li>
+    <li>UI language preference (ko / en / ja / zh)</li>
   </ul>
-  <p>This data <strong>never leaves your computer</strong>. Uninstalling
-  the extension removes all of it.</p>
 
-  <h2>What we read</h2>
+  <h2>What we sync across your Chromes</h2>
+  <p>BusyPet uses <code>chrome.storage.sync</code> only for the Pro
+  license key and 5-minute trial state, so a single purchase activates
+  Pro on every Chrome of your Google account:</p>
+  <ul>
+    <li>Pro license key (if you purchased Pro)</li>
+    <li>License activation instance ID</li>
+    <li>Last validation timestamp</li>
+    <li>5-minute Pro trial expiration timestamp (if started)</li>
+  </ul>
+  <p>This data is synced through your own Google account by Chrome
+  itself. We never see your sync data; only Chrome and the Google
+  account holder can access it.</p>
+
+  <h2>What we read from your system</h2>
   <ul>
     <li><strong>CPU and memory usage</strong>
         (<code>chrome.system.cpu</code>, <code>chrome.system.memory</code>):
-        used only to tune pet animation speed. Never transmitted.</li>
-    <li><strong>Active tab URL</strong>: used to identify which tab to show
-        the pet on (cross-window follow). Never transmitted or logged.</li>
-    <li><strong>Page favicon</strong>: we display the favicon of sites in
-        your shortcut bookmarks via DuckDuckGo's public favicon service
+        used only to tune pet animation speed (the pet runs faster when
+        your system is busy). These values are <strong>never
+        transmitted</strong> anywhere.</li>
+    <li><strong>Active tab ID</strong> (<code>chrome.tabs</code> via
+        the <code>&lt;all_urls&gt;</code> host permission): used solely
+        to identify which tab to show the pet on so the pet follows you
+        across tabs and windows. The tab URL or page content is
+        <strong>never transmitted or logged</strong>.</li>
+    <li><strong>Page favicon</strong> (only for shortcut bookmarks you
+        explicitly add): we display each shortcut's site icon via
+        DuckDuckGo's public favicon service
         (<code>icons.duckduckgo.com/ip3/{domain}.ico</code>) — a single
-        HTTP GET per shortcut, no cookies, no tracking.</li>
+        anonymous HTTP GET per shortcut. No cookies, no tracking, no
+        personal data.</li>
   </ul>
 
-  <h2>Network requests</h2>
+  <h2>Network requests we make</h2>
   <ul>
-    <li><strong>DuckDuckGo favicon service</strong>: one image fetch per
-        saved site. No personal data is sent.</li>
-    <li><strong>Pro license validation</strong> (only when you click
-        Activate after entering a license key): one HTTPS call to
-        Lemon Squeezy. Only the license key string is sent.</li>
+    <li><strong>DuckDuckGo favicon service</strong>: one image fetch
+        per saved shortcut, only when the shortcut bubble is shown. No
+        personal data is sent — only the public hostname of the
+        bookmark you added.</li>
+    <li><strong>Gumroad license validation</strong>
+        (<code>api.gumroad.com</code>): called only when you click the
+        "Activate" button after entering a Pro license key, and once
+        every 7 days for re-validation. We send only the license key
+        string and a generated instance name. We do not send any
+        personal information.</li>
   </ul>
-  <p>That's the entire list. We do not run analytics, telemetry, error
-  reporting, or A/B testing services.</p>
+  <p>That is the complete list of network requests. We do not run
+  analytics, telemetry, error reporting, crash logging, or A/B testing
+  services.</p>
+
+  <h2>What we do NOT do</h2>
+  <ul>
+    <li>We do <strong>not</strong> read or modify the content of web
+        pages you visit. The content script only injects an overlay
+        element ("the pet") above the page.</li>
+    <li>We do <strong>not</strong> track which sites you visit, your
+        browsing history, your clicks, your scrolls, or any user
+        activity.</li>
+    <li>We do <strong>not</strong> use cookies, web storage, or
+        fingerprinting on third-party sites.</li>
+    <li>We do <strong>not</strong> share, sell, or rent any data to
+        third parties.</li>
+    <li>We do <strong>not</strong> serve ads.</li>
+  </ul>
 
   <h2>Permissions explained</h2>
   <ul>
-    <li><code>&lt;all_urls&gt;</code>: required to inject the pet content
-        script on any web page so it can roam across all sites you visit.
-        We do <strong>not</strong> read page content — we only render an overlay.</li>
-    <li><code>system.cpu</code>, <code>system.memory</code>: pet animation
-        speed.</li>
-    <li><code>storage</code>: settings persistence on your device.</li>
-    <li><code>alarms</code>: schedules the 5-minute Pro trial expiration check.</li>
+    <li><code>&lt;all_urls&gt;</code> (host permission): required to
+        inject the pet overlay content script on any web page so the
+        pet can roam across all sites you visit. We use this only to
+        render the overlay — never to read page contents.</li>
+    <li><code>system.cpu</code>, <code>system.memory</code>: used only
+        to tune pet animation speed locally. Values never leave the
+        device.</li>
+    <li><code>storage</code>: persists user settings and the Pro
+        license key locally (and the license key syncs through Chrome
+        if Chrome sync is enabled).</li>
+    <li><code>alarms</code>: schedules the 5-minute Pro trial
+        expiration check and a periodic (every 6 hours) license
+        re-validation ping to Gumroad.</li>
   </ul>
 
+  <h2>Data retention and deletion</h2>
+  <p>All locally stored data lives in your browser only. Uninstalling
+  the extension removes everything stored by
+  <code>chrome.storage.local</code>. To also remove synced data
+  (license key), use Chrome's sync data dashboard at
+  <code>chrome.google.com/sync</code> or click "Deactivate" inside the
+  extension options before uninstalling.</p>
+
   <h2>Children</h2>
-  <p>BusyPet does not knowingly collect personal data from children. It
-  displays purely decorative pixel characters and stores no identity.</p>
+  <p>BusyPet does not knowingly collect personal data from children
+  under 13. The extension displays purely decorative pixel-art
+  characters and stores no identity information.</p>
+
+  <h2>Third-party services</h2>
+  <ul>
+    <li><strong>Gumroad</strong> (license verification only): we send
+        the license key string to <code>api.gumroad.com</code> when
+        you activate or revalidate. Gumroad's own privacy policy
+        applies to that one HTTPS call:
+        <a href="https://gumroad.com/privacy"
+           target="_blank" rel="noopener">gumroad.com/privacy</a></li>
+    <li><strong>DuckDuckGo Favicon Service</strong> (icons only):
+        public anonymous icon fetches. DuckDuckGo's privacy policy
+        applies:
+        <a href="https://duckduckgo.com/privacy"
+           target="_blank" rel="noopener">duckduckgo.com/privacy</a></li>
+  </ul>
 
   <h2>Contact</h2>
-  <p>For privacy questions, contact:
+  <p>For privacy questions or data requests, contact:
     <code>smlim0804@gmail.com</code></p>
 
-  <h2>Changes</h2>
-  <p>If we ever change what we touch, this page will be updated and the
-  "Last updated" date bumped.</p>
+  <h2>Changes to this policy</h2>
+  <p>If we ever change what data BusyPet touches, this page will be
+  updated and the "Last updated" date bumped. Material changes will be
+  highlighted in the extension's release notes.</p>
+
+  <!-- ===== 한국어 요약 ===== -->
+  <div class="lang-section">
+    <h1 style="font-size:28px;">개인정보처리방침 (한국어 요약)</h1>
+    <p class="updated">최종 업데이트: 2026-05-22 · 확장 프로그램 v1.0.0</p>
+
+    <div class="tldr">
+      <p><strong>요약:</strong> BusyPet은 어떤 개인 데이터도 수집/전송/판매하지
+      않습니다. 광고/트래커/분석 도구 없음. 페이지 내용을 읽지 않으며 오직
+      펫 오버레이만 렌더링합니다. 모든 설정은 로컬에 저장되며, Pro 라이선스
+      키만 Chrome 동기화로 본인 기기 간 공유됩니다.</p>
+    </div>
+
+    <h2>로컬 저장 데이터</h2>
+    <p><code>chrome.storage.local</code>에 저장:</p>
+    <ul>
+      <li>슬롯별 선택 캐릭터 (1~5번)</li>
+      <li>슬롯별 행동 설정 (움직임, 마우스, 속도, 크기, 이펙트, 활동 영역)</li>
+      <li>사용자가 추가한 바로가기 북마크</li>
+      <li>탭별 펫 저장 위치</li>
+      <li>UI 언어 (ko/en/ja/zh)</li>
+    </ul>
+
+    <h2>Chrome 계정 동기화 데이터</h2>
+    <p><code>chrome.storage.sync</code>로 본인 모든 Chrome 간 자동 공유:</p>
+    <ul>
+      <li>Pro 라이선스 키 (구매 시)</li>
+      <li>라이선스 활성화 instance ID</li>
+      <li>최근 검증 타임스탬프</li>
+      <li>5분 Pro 체험 만료 시각</li>
+    </ul>
+    <p>이 데이터는 본인의 Google 계정을 통해 Chrome 자체가 동기화합니다.
+    BusyPet은 sync 데이터를 직접 볼 수 없으며, 본인과 Chrome만 접근 가능합니다.</p>
+
+    <h2>시스템에서 읽는 정보</h2>
+    <ul>
+      <li><strong>CPU/메모리 사용량</strong>: 펫 애니메이션 속도 조절에만 사용.
+          외부로 전송되지 않음.</li>
+      <li><strong>활성 탭 ID</strong> (<code>chrome.tabs</code>): 펫이 어느
+          탭에 표시될지 식별하기 위해 사용. 탭의 URL이나 페이지 내용은
+          전송/기록되지 않음.</li>
+      <li><strong>사이트 파비콘</strong>: 본인이 추가한 바로가기 북마크에 대해서만
+          DuckDuckGo 공개 파비콘 서비스에서 아이콘을 가져옴. 익명 HTTP GET 1회.</li>
+    </ul>
+
+    <h2>외부 네트워크 호출</h2>
+    <ul>
+      <li><strong>DuckDuckGo 파비콘</strong>: 바로가기 말풍선 표시 시 1회씩.</li>
+      <li><strong>Gumroad 라이선스 검증</strong>(<code>api.gumroad.com</code>):
+          Pro 키 활성화 시 1회, 그 후 7일마다 재검증 1회. 라이선스 키 문자열만
+          전송, 개인정보는 전송되지 않음.</li>
+    </ul>
+
+    <h2>안 하는 것</h2>
+    <ul>
+      <li>페이지 내용을 읽지 않음 (오버레이만 렌더링)</li>
+      <li>방문 사이트, 검색 기록, 클릭, 스크롤, 사용자 활동 추적 안 함</li>
+      <li>제3자 사이트에서 쿠키/저장소/지문 사용 안 함</li>
+      <li>데이터 판매/공유/제3자 전송 안 함</li>
+      <li>광고 노출 안 함</li>
+    </ul>
+
+    <h2>권한 설명</h2>
+    <ul>
+      <li><code>&lt;all_urls&gt;</code>: 펫 오버레이를 모든 웹페이지에 표시하기
+          위해 필요. 페이지 내용은 읽지 않음.</li>
+      <li><code>system.cpu</code>, <code>system.memory</code>: 펫 속도 조절용.
+          외부 전송 없음.</li>
+      <li><code>storage</code>: 설정/라이선스 저장 (sync 시 Chrome으로만 동기화).</li>
+      <li><code>alarms</code>: 5분 체험 만료 + 6시간마다 라이선스 재검증 스케줄링.</li>
+    </ul>
+
+    <h2>데이터 삭제</h2>
+    <p>확장 프로그램 제거 시 <code>chrome.storage.local</code> 데이터는 자동
+    삭제됩니다. 동기화된 라이선스 정보까지 지우려면 옵션 페이지에서 "비활성화"를
+    먼저 누르거나 <code>chrome.google.com/sync</code>에서 동기화 데이터를 관리하세요.</p>
+
+    <h2>문의</h2>
+    <p>개인정보 관련 문의: <code>smlim0804@gmail.com</code></p>
+  </div>
 </div>
 </body>
 </html>
