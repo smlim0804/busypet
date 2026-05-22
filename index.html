@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BusyPet — 브라우저에 사는 픽셀 친구들</title>
-<meta name="description" content="14종 픽셀 펫 캐릭터가 브라우저 페이지를 자유롭게 돌아다니는 Chrome 확장 프로그램. 무료 5종 + Pro 9종 ($2.79 평생).">
+<title data-i18n="meta.title">BusyPet — 브라우저에 사는 픽셀 친구들</title>
+<meta name="description" data-i18n-attr="content:meta.desc"
+      content="14종 픽셀 펫 캐릭터가 브라우저 페이지를 자유롭게 돌아다니는 Chrome 확장 프로그램. 무료 5종 + Pro 9종 ($2.79 평생, Gumroad).">
 <link rel="icon" href="icon.png" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
-                 "Noto Sans CJK KR", sans-serif;
+                 "Noto Sans CJK KR", "Noto Sans CJK JP", "Noto Sans CJK SC", sans-serif;
     color: #1a1f2e;
     background: linear-gradient(180deg, #f6f4ff 0%, #ffffff 60%);
     line-height: 1.6;
@@ -20,14 +21,64 @@
   header {
     padding: 24px 0;
     display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
   }
   .logo-row { display: flex; align-items: center; gap: 12px; }
   .logo-row img { width: 40px; height: 40px; border-radius: 10px; }
   .logo-row .name { font-size: 22px; font-weight: 800; color: #2a1d6a; }
+  nav { display: flex; align-items: center; gap: 8px; }
   nav a {
-    color: #5a5f70; text-decoration: none; margin-left: 24px; font-size: 15px;
+    color: #5a5f70; text-decoration: none; padding: 0 12px; font-size: 15px;
   }
   nav a:hover { color: #2a1d6a; }
+
+  /* 언어 스위처 */
+  .lang-switch {
+    position: relative;
+    display: inline-block;
+  }
+  .lang-btn {
+    background: white;
+    border: 1px solid #ebeaf3;
+    border-radius: 999px;
+    padding: 8px 14px 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2a1d6a;
+    font-weight: 600;
+  }
+  .lang-btn:hover { background: #f5f3ff; border-color: #c9b8ff; }
+  .lang-btn .globe {
+    width: 18px; height: 18px; display: inline-block; vertical-align: middle;
+  }
+  .lang-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: white;
+    border: 1px solid #ebeaf3;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    min-width: 160px;
+    padding: 6px;
+    display: none;
+    z-index: 100;
+  }
+  .lang-menu.open { display: block; }
+  .lang-item {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: #2a3040;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .lang-item:hover { background: #f5f3ff; }
+  .lang-item.active { background: #ede7ff; font-weight: 700; color: #2a1d6a; }
 
   .hero {
     text-align: center;
@@ -46,7 +97,7 @@
     color: #5a5f70;
     margin-bottom: 16px;
   }
-  .hero .sub-en { font-size: 18px; color: #8a8f9a; margin-bottom: 40px; }
+  .hero .sub-en { font-size: 16px; color: #8a8f9a; margin-bottom: 40px; }
   .cta {
     display: inline-block;
     background: linear-gradient(135deg, #7a5ce6 0%, #5e3fcc 100%);
@@ -95,20 +146,11 @@
     border-radius: 18px;
     padding: 28px;
   }
-  .feature .icon {
-    font-size: 36px; margin-bottom: 14px;
-  }
-  .feature h3 {
-    font-size: 18px; margin-bottom: 8px; color: #1a1145;
-  }
-  .feature p {
-    color: #6a6f80; font-size: 15px;
-  }
+  .feature .icon { font-size: 36px; margin-bottom: 14px; }
+  .feature h3 { font-size: 18px; margin-bottom: 8px; color: #1a1145; }
+  .feature p { color: #6a6f80; font-size: 15px; }
 
-  .pricing {
-    background: #f9f7ff;
-    text-align: center;
-  }
+  .pricing { background: #f9f7ff; text-align: center; }
   .price-card {
     background: white;
     max-width: 460px;
@@ -125,7 +167,8 @@
     letter-spacing: -2px;
   }
   .price-card .price small { font-size: 28px; color: #8a8f9a; }
-  .price-card .terms { color: #6a6f80; margin-bottom: 32px; }
+  .price-card .terms { color: #6a6f80; margin-bottom: 8px; }
+  .price-card .tax { color: #8a8f9a; font-size: 13px; margin-bottom: 32px; }
   .price-card ul {
     list-style: none; text-align: left;
     margin: 0 auto 32px;
@@ -147,7 +190,7 @@
     text-align: center;
   }
   footer a { color: #5a5f70; margin: 0 8px; }
-  .lang { font-size: 14px; color: #8a8f9a; margin-top: 8px; }
+  .lang-note { font-size: 14px; color: #8a8f9a; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -157,75 +200,104 @@
       <div class="name">BusyPet</div>
     </div>
     <nav>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="mailto:smlim0804@gmail.com">Contact</a>
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="privacy.html" data-i18n="nav.privacy">Privacy</a>
+      <a href="mailto:smlim0804@gmail.com" data-i18n="nav.contact">Contact</a>
+
+      <!-- 언어 스위처 -->
+      <div class="lang-switch">
+        <button class="lang-btn" id="lang-btn" type="button" aria-label="Change language">
+          <svg class="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span id="lang-current">한국어</span>
+          <span style="font-size:11px;">▾</span>
+        </button>
+        <div class="lang-menu" id="lang-menu">
+          <a class="lang-item" data-lang="ko">🇰🇷 한국어</a>
+          <a class="lang-item" data-lang="en">🇺🇸 English</a>
+          <a class="lang-item" data-lang="ja">🇯🇵 日本語</a>
+          <a class="lang-item" data-lang="zh">🇨🇳 简体中文</a>
+        </div>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="hero container">
-      <h1>브라우저에 사는 픽셀 친구들 🐾</h1>
-      <p class="sub">14종 픽셀 펫이 페이지를 가로질러 따라다녀요</p>
-      <p class="sub-en">Pixel pets that follow you across browser tabs.<br>
-        ブラウザに住むピクセル友達がタブを越えて追従。</p>
-      <a class="cta" href="#pricing">Get BusyPet <span class="price-badge">$2.79</span></a>
+      <h1 data-i18n="hero.h1">브라우저에 사는 픽셀 친구들 🐾</h1>
+      <p class="sub" data-i18n="hero.sub">14종 픽셀 펫이 페이지를 가로질러 따라다녀요</p>
+      <p class="sub-en" data-i18n="hero.tagline">슬롯별 개별 설정 · ☁️ Chrome 계정 동기화 · 광고 없음</p>
+      <a class="cta" href="#pricing">
+        <span data-i18n="hero.cta">Get BusyPet</span>
+        <span class="price-badge">$2.79</span>
+      </a>
     </section>
 
     <section id="features" class="container">
-      <h2>What's inside</h2>
-      <p class="lede">14 hand-crafted pixel characters · cross-tab follow · 5-minute Pro trial</p>
+      <h2 data-i18n="feat.title">What's inside</h2>
+      <p class="lede" data-i18n="feat.lede">14 hand-crafted pixel characters · cross-tab follow · 5-minute Pro trial</p>
       <div class="features">
         <div class="feature">
           <div class="icon">🐾</div>
-          <h3>14 캐릭터 · 14 Characters</h3>
-          <p>UFO · 자동차 · 슬라임 · 혜성 · 별 등 무료 5종 + Pro 9종 (로켓·토성·보석·도넛·해골·안구·에너지볼·벌레·탱크)</p>
+          <h3 data-i18n="feat.chars.h">14 캐릭터</h3>
+          <p data-i18n="feat.chars.p">UFO · 자동차 · 슬라임 · 혜성 · 별 등 무료 5종 + Pro 9종 (로켓·토성·보석·도넛·해골·안구·에너지볼·벌레·탱크)</p>
         </div>
         <div class="feature">
           <div class="icon">🌍</div>
-          <h3>탭 가로질러 따라옴</h3>
-          <p>활성 탭이 바뀌면 펫이 자동으로 그 탭으로 텔레포트. 여러 창에서도 한 마리만 따라다님.</p>
+          <h3 data-i18n="feat.cross.h">탭 가로질러 따라옴</h3>
+          <p data-i18n="feat.cross.p">활성 탭이 바뀌면 펫이 자동으로 그 탭으로 텔레포트. 여러 창에서도 한 마리만 따라다님.</p>
         </div>
         <div class="feature">
           <div class="icon">🎮</div>
-          <h3>자유로운 행동 설정</h3>
-          <p>움직임 · 마우스 반응 · 속도 · 크기 · 활동 영역 (전체/상단/하단/직접 그리기)</p>
+          <h3 data-i18n="feat.slot.h">슬롯별 개별 설정</h3>
+          <p data-i18n="feat.slot.p">슬롯마다 따로 — 움직임 · 마우스 반응 · 속도 · 크기 · 활동 영역 · 이펙트. 펫마다 다르게 커스터마이즈.</p>
         </div>
         <div class="feature">
           <div class="icon">🔗</div>
-          <h3>바로가기 말풍선</h3>
-          <p>펫 클릭 → 자주 가는 사이트 바로가기. 무료 2개 / Pro 무제한.</p>
+          <h3 data-i18n="feat.short.h">바로가기 말풍선</h3>
+          <p data-i18n="feat.short.p">펫 클릭 → 자주 가는 사이트 바로가기. 무료 2개 / Pro 무제한.</p>
         </div>
         <div class="feature">
           <div class="icon">✨</div>
-          <h3>Pro 이펙트</h3>
-          <p>무지개 잔상, 탱크 레이저 빔, 캐릭터별 특수 효과.</p>
+          <h3 data-i18n="feat.fx.h">Pro 이펙트</h3>
+          <p data-i18n="feat.fx.p">무지개 잔상, 탱크 레이저 빔, 캐릭터별 특수 효과 (슬라임 점액·별 폭발 등).</p>
+        </div>
+        <div class="feature">
+          <div class="icon">☁️</div>
+          <h3 data-i18n="feat.sync.h">Chrome 계정 동기화</h3>
+          <p data-i18n="feat.sync.p">한 번 결제하면 같은 Google 계정의 모든 Chrome에서 Pro 자동 활성화. 기기마다 키 입력 불필요.</p>
         </div>
         <div class="feature">
           <div class="icon">🔒</div>
-          <h3>프라이버시 안전</h3>
-          <p>모든 설정 로컬 저장 · 페이지 내용 읽지 않음 · 트래커 없음.</p>
+          <h3 data-i18n="feat.priv.h">프라이버시 안전</h3>
+          <p data-i18n="feat.priv.p">페이지 내용 안 읽음 · 광고/트래커/분석 없음 · 로컬 저장 · 라이선스 키만 Chrome 동기화로 본인 기기에만.</p>
         </div>
       </div>
     </section>
 
     <section id="pricing" class="pricing">
       <div class="container">
-        <h2>Pro 평생 사용</h2>
-        <p class="lede">One-time payment, lifetime access · 단 한 번 결제로 평생</p>
+        <h2 data-i18n="price.title">Pro 평생 사용</h2>
+        <p class="lede" data-i18n="price.lede">한 번 결제로 평생 사용 · 모든 미래 업데이트 포함</p>
         <div class="price-card">
           <div class="price">$2.79<small> USD</small></div>
-          <p class="terms">단 한 번 결제 · 평생 사용 · 모든 업데이트 포함</p>
+          <p class="terms" data-i18n="price.terms">한국 사용자 결제액 · 한 번 결제 · 평생 사용</p>
+          <p class="tax" data-i18n="price.tax">($2.54 + 한국 부가세 10%. 미국 sales tax · EU VAT 등은 결제 시 자동 계산)</p>
           <ul>
-            <li>✓ Pro 캐릭터 9종 잠금 해제</li>
-            <li>✓ 무지개 이펙트 + 특수효과</li>
-            <li>✓ 무제한 바로가기</li>
-            <li>✓ 5분 무료 체험 후 결제</li>
-            <li>✓ 모든 미래 업데이트 포함</li>
+            <li data-i18n="price.b1">✓ Pro 캐릭터 9종 잠금 해제</li>
+            <li data-i18n="price.b2">✓ 무지개 이펙트 + 캐릭터별 특수효과</li>
+            <li data-i18n="price.b3">✓ 무제한 바로가기 (무료 2개 → 무제한)</li>
+            <li data-i18n="price.b4">✓ 슬롯별 개별 설정 (Pro 캐릭터 포함)</li>
+            <li data-i18n="price.b5">✓ 5분 무료 체험 후 결제</li>
+            <li data-i18n="price.b6">✓ ☁️ Chrome 계정 모든 기기 자동 동기화</li>
+            <li data-i18n="price.b7">✓ 모든 미래 업데이트 평생 포함</li>
           </ul>
-          <a class="cta" href="https://chromewebstore.google.com/" target="_blank" rel="noopener">
-            Chrome Web Store에서 받기
+          <a class="cta" href="https://chromewebstore.google.com/" target="_blank" rel="noopener" data-i18n="price.cta">
+            Chrome Web Store에서 받기 →
           </a>
         </div>
       </div>
@@ -234,12 +306,245 @@
 
   <footer class="container">
     <div>
-      <a href="privacy.html">Privacy Policy</a> ·
-      <a href="mailto:smlim0804@gmail.com">Contact</a> ·
-      <a href="https://chromewebstore.google.com/" target="_blank" rel="noopener">Chrome Web Store</a>
+      <a href="privacy.html" data-i18n="nav.privacy">Privacy Policy</a> ·
+      <a href="mailto:smlim0804@gmail.com" data-i18n="nav.contact">Contact</a> ·
+      <a href="https://chromewebstore.google.com/" target="_blank" rel="noopener" data-i18n="footer.cws">Chrome Web Store</a>
     </div>
-    <div class="lang">한국어 / English / 日本語 / 简体中文 supported</div>
+    <div class="lang-note">한국어 / English / 日本語 / 简体中文 supported</div>
     <div style="margin-top: 16px;">© 2026 BusyPet. All rights reserved.</div>
   </footer>
+
+  <!-- ===== i18n 데이터 & 토글 ===== -->
+  <script>
+  const T = {
+    ko: {
+      "meta.title": "BusyPet — 브라우저에 사는 픽셀 친구들",
+      "meta.desc": "14종 픽셀 펫 캐릭터가 브라우저 페이지를 자유롭게 돌아다니는 Chrome 확장. 무료 5종 + Pro 9종 ($2.79 평생).",
+      "nav.features": "Features",
+      "nav.pricing": "Pricing",
+      "nav.privacy": "Privacy",
+      "nav.contact": "Contact",
+      "footer.cws": "Chrome Web Store",
+      "hero.h1": "브라우저에 사는 픽셀 친구들 🐾",
+      "hero.sub": "14종 픽셀 펫이 페이지를 가로질러 따라다녀요",
+      "hero.tagline": "슬롯별 개별 설정 · ☁️ Chrome 계정 동기화 · 광고 없음",
+      "hero.cta": "Get BusyPet",
+      "feat.title": "무엇이 들어있나",
+      "feat.lede": "14종 픽셀 캐릭터 · 탭 가로질러 따라옴 · 5분 Pro 체험",
+      "feat.chars.h": "14 캐릭터",
+      "feat.chars.p": "UFO · 자동차 · 슬라임 · 혜성 · 별 등 무료 5종 + Pro 9종 (로켓·토성·보석·도넛·해골·안구·에너지볼·벌레·탱크)",
+      "feat.cross.h": "탭 가로질러 따라옴",
+      "feat.cross.p": "활성 탭이 바뀌면 펫이 자동으로 그 탭으로 텔레포트. 여러 창에서도 한 마리만 따라다님.",
+      "feat.slot.h": "슬롯별 개별 설정",
+      "feat.slot.p": "슬롯마다 따로 — 움직임 · 마우스 반응 · 속도 · 크기 · 활동 영역 · 이펙트. 펫마다 다르게 커스터마이즈.",
+      "feat.short.h": "바로가기 말풍선",
+      "feat.short.p": "펫 클릭 → 자주 가는 사이트 바로가기. 무료 2개 / Pro 무제한.",
+      "feat.fx.h": "Pro 이펙트",
+      "feat.fx.p": "무지개 잔상, 탱크 레이저 빔, 캐릭터별 특수 효과 (슬라임 점액·별 폭발 등).",
+      "feat.sync.h": "Chrome 계정 동기화",
+      "feat.sync.p": "한 번 결제하면 같은 Google 계정의 모든 Chrome에서 Pro 자동 활성화. 기기마다 키 입력 불필요.",
+      "feat.priv.h": "프라이버시 안전",
+      "feat.priv.p": "페이지 내용 안 읽음 · 광고/트래커/분석 없음 · 로컬 저장 · 라이선스 키만 Chrome 동기화로 본인 기기에만.",
+      "price.title": "Pro 평생 사용",
+      "price.lede": "한 번 결제로 평생 사용 · 모든 미래 업데이트 포함",
+      "price.terms": "한국 사용자 결제액 · 한 번 결제 · 평생 사용",
+      "price.tax": "($2.54 + 한국 부가세 10%. 미국 sales tax · EU VAT 등은 결제 시 자동 계산)",
+      "price.b1": "✓ Pro 캐릭터 9종 잠금 해제",
+      "price.b2": "✓ 무지개 이펙트 + 캐릭터별 특수효과",
+      "price.b3": "✓ 무제한 바로가기 (무료 2개 → 무제한)",
+      "price.b4": "✓ 슬롯별 개별 설정 (Pro 캐릭터 포함)",
+      "price.b5": "✓ 5분 무료 체험 후 결제",
+      "price.b6": "✓ ☁️ Chrome 계정 모든 기기 자동 동기화",
+      "price.b7": "✓ 모든 미래 업데이트 평생 포함",
+      "price.cta": "Chrome Web Store에서 받기 →",
+    },
+    en: {
+      "meta.title": "BusyPet — Pixel pets living in your browser",
+      "meta.desc": "14 pixel pet characters that roam your browser pages. 5 Free + 9 Pro ($2.79 lifetime).",
+      "nav.features": "Features",
+      "nav.pricing": "Pricing",
+      "nav.privacy": "Privacy",
+      "nav.contact": "Contact",
+      "footer.cws": "Chrome Web Store",
+      "hero.h1": "Pixel pets living in your browser 🐾",
+      "hero.sub": "14 pixel friends that follow you across tabs",
+      "hero.tagline": "Per-slot settings · ☁️ Chrome account sync · no ads",
+      "hero.cta": "Get BusyPet",
+      "feat.title": "What's inside",
+      "feat.lede": "14 hand-crafted pixel characters · cross-tab follow · 5-minute Pro trial",
+      "feat.chars.h": "14 Characters",
+      "feat.chars.p": "Free 5: UFO · Sports Car · Slime · Comet · Shiny Star. Pro 9: Rocket · Saturn · Gem · Donut · Skull · Eyeball · Energy Ball · Cockroach · Tank.",
+      "feat.cross.h": "Cross-tab follow",
+      "feat.cross.p": "Switch tabs and your pet teleports to the active tab automatically. Cross-window mode keeps a single pet roaming.",
+      "feat.slot.h": "Per-slot customization",
+      "feat.slot.p": "Each slot independently — motion · mouse · speed · size · activity area · effect. Customize each pet differently.",
+      "feat.short.h": "Shortcut bubbles",
+      "feat.short.p": "Click your pet to open shortcuts for your favorite sites. Free: 2 max. Pro: unlimited.",
+      "feat.fx.h": "Pro effects",
+      "feat.fx.p": "Rainbow trails, tank laser beams, per-character specials (slime trail, star burst, etc.).",
+      "feat.sync.h": "Chrome account sync",
+      "feat.sync.p": "One purchase activates Pro on every Chrome of your Google account. No re-entering the key per device.",
+      "feat.priv.h": "Privacy-first",
+      "feat.priv.p": "We never read page contents. No ads, trackers, or analytics. Local storage only — only your license key syncs through your own Chrome account.",
+      "price.title": "Lifetime Pro",
+      "price.lede": "One-time payment, lifetime access · all future updates included",
+      "price.terms": "Korean user total · one-time · lifetime access",
+      "price.tax": "($2.54 + 10% Korean VAT. US sales tax, EU VAT, etc. calculated automatically at checkout)",
+      "price.b1": "✓ 9 Pro characters unlocked",
+      "price.b2": "✓ Rainbow trails + per-character special effects",
+      "price.b3": "✓ Unlimited shortcuts (free 2 → unlimited)",
+      "price.b4": "✓ Per-slot customization (including Pro characters)",
+      "price.b5": "✓ Try free for 5 minutes before paying",
+      "price.b6": "✓ ☁️ Auto-sync across all Chromes of your account",
+      "price.b7": "✓ All future updates for life",
+      "price.cta": "Get on Chrome Web Store →",
+    },
+    ja: {
+      "meta.title": "BusyPet — ブラウザに住むピクセル友達",
+      "meta.desc": "14種のピクセルペットがブラウザ画面を走り回るChrome拡張。無料5 + Pro 9 ($2.79 買い切り)。",
+      "nav.features": "機能",
+      "nav.pricing": "価格",
+      "nav.privacy": "プライバシー",
+      "nav.contact": "お問い合わせ",
+      "footer.cws": "Chrome ウェブストア",
+      "hero.h1": "ブラウザに住むピクセル友達 🐾",
+      "hero.sub": "14種のピクセルペットがタブを越えて追従",
+      "hero.tagline": "スロット別設定 · ☁️ Chrome同期 · 広告なし",
+      "hero.cta": "BusyPetを入手",
+      "feat.title": "中身は",
+      "feat.lede": "14種のピクセルキャラ · タブを越えて追従 · 5分Proトライアル",
+      "feat.chars.h": "14キャラ",
+      "feat.chars.p": "無料5: UFO・スポーツカー・スライム・彗星・キラ星。Pro 9: ロケット・土星・宝石・ドーナツ・ガイコツ・目玉・エネルギーボール・ゴキブリ・戦車。",
+      "feat.cross.h": "タブを越えて追従",
+      "feat.cross.p": "タブを切り替えるとペットが自動で追従。複数ウィンドウでも1匹だけ追従。",
+      "feat.slot.h": "スロット別カスタマイズ",
+      "feat.slot.p": "スロットごとに個別設定 — 動き · マウス · 速度 · サイズ · 活動領域 · エフェクト。",
+      "feat.short.h": "ショートカット吹き出し",
+      "feat.short.p": "ペットをクリックでお気に入りサイトへ。無料2個 / Pro無制限。",
+      "feat.fx.h": "Proエフェクト",
+      "feat.fx.p": "虹色の軌跡、戦車レーザー、キャラ別エフェクト (スライム軌跡・星の爆発など)。",
+      "feat.sync.h": "Chrome同期",
+      "feat.sync.p": "一度購入で同一GoogleアカウントのすべてのChromeに自動Pro適用。",
+      "feat.priv.h": "プライバシー重視",
+      "feat.priv.p": "ページ内容を読まない · 広告/トラッカー/分析なし · ローカル保存 · ライセンスキーのみChrome同期。",
+      "price.title": "Pro 買い切り",
+      "price.lede": "一度の支払いで永久使用 · 今後のすべてのアップデート含む",
+      "price.terms": "韓国ユーザー合計 · 買い切り · 永久使用",
+      "price.tax": "($2.54 + 韓国VAT 10%。米国sales taxやEU VAT等は決済時に自動計算)",
+      "price.b1": "✓ Proキャラ9種解放",
+      "price.b2": "✓ 虹色軌跡 + キャラ別特殊エフェクト",
+      "price.b3": "✓ 無制限ショートカット (無料2 → 無制限)",
+      "price.b4": "✓ スロット別個別設定",
+      "price.b5": "✓ 購入前5分無料トライアル",
+      "price.b6": "✓ ☁️ Chrome全端末自動同期",
+      "price.b7": "✓ すべての今後のアップデート含む",
+      "price.cta": "Chrome ウェブストアで入手 →",
+    },
+    zh: {
+      "meta.title": "BusyPet — 住在浏览器里的像素小伙伴",
+      "meta.desc": "14款像素宠物在浏览器页面自由走动的 Chrome 扩展。免费5 + Pro 9 ($2.79 终身)。",
+      "nav.features": "功能",
+      "nav.pricing": "价格",
+      "nav.privacy": "隐私",
+      "nav.contact": "联系",
+      "footer.cws": "Chrome 网上应用店",
+      "hero.h1": "住在浏览器里的像素小伙伴 🐾",
+      "hero.sub": "14款像素宠物跨标签页跟随您",
+      "hero.tagline": "每个角色独立设置 · ☁️ Chrome 账号同步 · 无广告",
+      "hero.cta": "获取 BusyPet",
+      "feat.title": "包含什么",
+      "feat.lede": "14款手工像素角色 · 跨标签页跟随 · 5分钟 Pro 试用",
+      "feat.chars.h": "14款角色",
+      "feat.chars.p": "免费5: UFO·跑车·史莱姆·彗星·闪亮星。Pro 9: 火箭·土星·宝石·甜甜圈·骷髅·眼球·能量球·蟑螂·坦克。",
+      "feat.cross.h": "跨标签页跟随",
+      "feat.cross.p": "切换标签页,宠物自动传送到活动标签。多窗口下也只有一只宠物跟随。",
+      "feat.slot.h": "每个角色独立设置",
+      "feat.slot.p": "每个槽位独立 — 移动 · 鼠标 · 速度 · 大小 · 活动区域 · 特效。",
+      "feat.short.h": "快捷气泡",
+      "feat.short.p": "点击宠物打开常用网站快捷方式。免费2个 / Pro 无限。",
+      "feat.fx.h": "Pro 特效",
+      "feat.fx.p": "彩虹轨迹、坦克激光、角色专属特效 (史莱姆轨迹·星星爆发等)。",
+      "feat.sync.h": "Chrome 账号同步",
+      "feat.sync.p": "一次购买,同一 Google 账号的所有 Chrome 自动激活 Pro。无需每台设备重新输入密钥。",
+      "feat.priv.h": "注重隐私",
+      "feat.priv.p": "不读取页面内容 · 无广告/追踪/分析 · 本地存储 · 仅许可证密钥通过 Chrome 同步。",
+      "price.title": "终身 Pro",
+      "price.lede": "一次付费,终身使用 · 包含所有未来更新",
+      "price.terms": "韩国用户支付总额 · 一次性 · 终身使用",
+      "price.tax": "($2.54 + 韩国 VAT 10%。美国 sales tax、欧盟 VAT 等于结账时自动计算)",
+      "price.b1": "✓ 解锁 9 款 Pro 角色",
+      "price.b2": "✓ 彩虹轨迹 + 角色专属特效",
+      "price.b3": "✓ 无限快捷方式 (免费2 → 无限)",
+      "price.b4": "✓ 每个角色独立设置",
+      "price.b5": "✓ 购买前 5 分钟免费试用",
+      "price.b6": "✓ ☁️ 所有 Chrome 自动同步",
+      "price.b7": "✓ 包含所有未来更新",
+      "price.cta": "在 Chrome 网上应用店获取 →",
+    },
+  };
+
+  const LANG_LABELS = { ko: "한국어", en: "English", ja: "日本語", zh: "简体中文" };
+
+  function applyLang(lang) {
+    const tbl = T[lang] || T.ko;
+    document.documentElement.lang = lang;
+    // textContent 적용
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (tbl[k]) el.textContent = tbl[k];
+    });
+    // attribute 적용 (예: meta content)
+    document.querySelectorAll("[data-i18n-attr]").forEach(el => {
+      const [attr, key] = el.getAttribute("data-i18n-attr").split(":");
+      if (tbl[key]) el.setAttribute(attr, tbl[key]);
+    });
+    // <title> 변경
+    if (tbl["meta.title"]) document.title = tbl["meta.title"];
+    // 현재 언어 라벨
+    document.getElementById("lang-current").textContent = LANG_LABELS[lang];
+    // active 표시
+    document.querySelectorAll(".lang-item").forEach(it => {
+      it.classList.toggle("active", it.getAttribute("data-lang") === lang);
+    });
+    // 저장
+    try { localStorage.setItem("busypet.lang", lang); } catch (e) {}
+  }
+
+  // 초기 언어: 저장된 값 → 브라우저 언어 → ko
+  function detectLang() {
+    try {
+      const saved = localStorage.getItem("busypet.lang");
+      if (saved && T[saved]) return saved;
+    } catch (e) {}
+    const nav = (navigator.language || "ko").toLowerCase();
+    if (nav.startsWith("en")) return "en";
+    if (nav.startsWith("ja")) return "ja";
+    if (nav.startsWith("zh")) return "zh";
+    return "ko";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    applyLang(detectLang());
+
+    const btn = document.getElementById("lang-btn");
+    const menu = document.getElementById("lang-menu");
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("open");
+    });
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && e.target !== btn) {
+        menu.classList.remove("open");
+      }
+    });
+    document.querySelectorAll(".lang-item").forEach(it => {
+      it.addEventListener("click", (e) => {
+        e.preventDefault();
+        applyLang(it.getAttribute("data-lang"));
+        menu.classList.remove("open");
+      });
+    });
+  });
+  </script>
 </body>
 </html>
